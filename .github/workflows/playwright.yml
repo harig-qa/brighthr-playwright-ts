@@ -1,6 +1,5 @@
 name: Playwright Tests
 
-# Trigger on push to main AND on Pull Requests
 on:
   push:
     branches: [ main, master ]
@@ -30,12 +29,15 @@ jobs:
         run: npx playwright install --with-deps
 
       - name: Run tests
+        env:
+          TEST_EMAIL: ${{ secrets.TEST_EMAIL }}
+          TEST_PASSWORD: ${{ secrets.TEST_PASSWORD }}
         run: npx playwright test
 
       - name: Upload HTML Report
-        if: always() # Upload even if tests fail
+        if: always()
         uses: actions/upload-artifact@v5
         with:
           name: playwright-report
           path: playwright-report/
-          retention-days: 30 # Keep report for 30 days
+          retention-days: 30

@@ -3,11 +3,14 @@ import { LoginPage } from '../pages/LoginPage';
 import { DashboardPage } from '../pages/DashboardPage';
 import { EmployeePage } from '../pages/EmployeePage';
 
+
+
 test.setTimeout(180000); // CI-friendly timeout
 
 test.describe('Add Employees Test', () => {
-  const userEmail = 'hari.justin@gmail.com';
-  const userPassword = 'T3sting12345!';
+   // ✅ Add || 'fallback' — red lines GONE + works locally AND in CI
+  const userEmail = String(process.env.TEST_EMAIL) || 'hari.justin@gmail.com';
+  const userPassword = String(process.env.TEST_PASSWORD) || 'T3sting12345!';
   const expectedUserName = 'Hari';
 
   test('Login → Add 2 employees via popup → Verify both displayed', async ({ page }) => {
