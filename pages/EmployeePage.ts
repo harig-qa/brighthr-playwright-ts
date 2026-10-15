@@ -96,7 +96,8 @@ export class EmployeePage {
 
     // Confirm popup is fully gone
     await this.page.waitForSelector('[role="dialog"]', { state: 'hidden', timeout: 5000 });
-    await this.page.waitForLoadState('networkidle');
+   //await this.page.waitForLoadState('networkidle');
+    await this.page.waitForLoadState('domcontentloaded');
   }
 
   async checkEmployeeVisible(firstName: string, lastName: string) {

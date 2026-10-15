@@ -3,6 +3,8 @@ import { LoginPage } from '../pages/LoginPage';
 import { DashboardPage } from '../pages/DashboardPage';
 import { EmployeePage } from '../pages/EmployeePage';
 
+test.setTimeout(180000); // CI-friendly timeout
+
 test.describe('Add Employees Test', () => {
   const userEmail = 'hari.justin@gmail.com';
   const userPassword = 'T3sting12345!';

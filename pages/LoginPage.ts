@@ -10,18 +10,13 @@ export class LoginPage {
   constructor(page: Page) {
     this.page = page;
 
-    // Top-right "Log in" button on homepage FYI It's an <a> tag, NOT a button!
-  //this.loginButtonTop = page.getByRole('button', { name: /Log in/i });
+    // Top-right "Log in" link
     this.loginButtonTop = page.locator('a', { hasText: 'Log in' });
 
-    // Email field — using id="username"
+    // Login form — exact IDs
     this.emailInput = page.locator('#username');
-
-    // Password field — using id="password"
     this.passwordInput = page.locator('#password');
-
-    // Login button — using YOUR exact data-testid
-    this.submitLoginButton = page.getByTestId('login-button');
+    this.submitLoginButton = page.locator('[data-testid="login-button"]');
   }
 
   async open() {
@@ -33,28 +28,30 @@ export class LoginPage {
     await this.open();
     console.log('✅ Homepage opened');
 
-    // Step 2: Click "Log in" button at top-right
-    await this.page.waitForLoadState('networkidle');
-    await this.loginButtonTop.waitFor({ state: 'visible', timeout: 10000 });
+    // ✅ REMOVED networkidle — it causes CI timeouts!
+    await this.page.waitForLoadState('domcontentloaded');
+    
+    // Step 2: Click Log in link — longer timeout for CI
+    await this.loginButtonTop.waitFor({ state: 'visible', timeout: 30000 });
     await this.loginButtonTop.click();
     console.log('✅ Log in button clicked — going to login page');
 
-    // Step 3: Fill email — using id="username"
-    await this.emailInput.waitFor({ state: 'visible', timeout: 15000 });
+    // Step 3: Fill login form
+    await this.emailInput.waitFor({ state: 'visible', timeout: 30000 });
     await this.emailInput.fill(email);
     console.log('✅ Email filled');
 
-    // Step 4: Fill password — using id="password"
-    await this.passwordInput.waitFor({ state: 'visible', timeout: 15000 });
+    await this.passwordInput.waitFor({ state: 'visible', timeout: 30000 });
     await this.passwordInput.fill(password);
     console.log('✅ Password filled');
 
-    // Step 5: Click Login button — using data-testid
-    await this.submitLoginButton.waitFor({ state: 'visible', timeout: 10000 });
+    // Step 4: Submit
+    await this.submitLoginButton.waitFor({ state: 'visible', timeout: 15000 });
     await this.submitLoginButton.click();
-    console.log('✅ Login button clicked — logging in...');
+    console.log('✅ Login submitted');
 
-    await this.page.waitForLoadState('networkidle');
+    // ✅ Don't wait for networkidle here either
+    await this.page.waitForURL(/dashboard|employee-hub/, { timeout: 30000 });
     console.log('✅ Logged in successfully!');
   }
 }
